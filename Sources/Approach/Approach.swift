@@ -52,7 +52,7 @@ public enum SendMessageResult {
     case failure(Swift.Error)
 }
 
-public enum ReceiveMessageResult{
+public enum ReceiveMessageResult {
     case success(Data, metadata: Data)
     case failure(Swift.Error)
 }
