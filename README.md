@@ -4,6 +4,16 @@
 
 Approach is a small Swift framework for client/server message passing between apps over the network.
 
+Minimum system requirements: iOS 12, tvOS 12, macOS 10.14 Mojave
+
 ## License
 
 Approach is available under the MIT License. See the LICENSE file in the repository for details.
+
+## Building with Swift Package Manager
+
+Build with Mojave as build target:
+
+```bash
+swift build -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.12"
+```
