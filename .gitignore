@@ -4,6 +4,8 @@
 /.build
 /Packages
 
+/Approach.xcodeproj
+
 # Xcode
 
 /build
