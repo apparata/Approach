@@ -629,6 +629,10 @@ private class MessageSender {
                     completion?(.failure(error))
                 }
             }))
+            guard data.count > 0 else {
+                completion?(.success)
+                return
+            }
             connection.send(content: data, completion: .contentProcessed({ error in
                 if let error = error {
                     completion?(.failure(error))
@@ -698,6 +702,10 @@ private class MessageReceiver {
             let length: Int32 = data.scanValue()
             guard length < maxMessageDataLength else {
                 completion(.failure(MessageServiceError.corruptMessage))
+                return
+            }
+            guard length > 0 else {
+                completion(.success(Data(), metadata: metadata))
                 return
             }
             self?.receiveData(on: connection, length: Int(length), metadata: metadata, completion: completion)
