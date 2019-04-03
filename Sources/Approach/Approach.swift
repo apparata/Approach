@@ -121,6 +121,8 @@ public class MessageService {
                 if case .service(let name, _, _, _) = endpoint, let self = self {
                     self.delegate?.messageService(self, didUnadvertiseAs: name)
                 }
+            @unknown default:
+                assert(false)
             }
         }
         
@@ -186,6 +188,9 @@ public class MessageService {
         /// Cancelled listeners have been invalidated by the client and will send no more events
         case .cancelled:
             break
+            
+        @unknown default:
+            assert(false)
         }
     }
     
@@ -222,8 +227,8 @@ public protocol MessageServiceDelegate: class {
 
 @available(iOS 12.0, macOS 10.14, tvOS 12.0, *)
 public extension MessageServiceDelegate {
-    public func messageService(_ service: MessageService, didAdvertiseAs name: String) {}
-    public func messageService(_ service: MessageService, didUnadvertiseAs name: String) {}
+    func messageService(_ service: MessageService, didAdvertiseAs name: String) {}
+    func messageService(_ service: MessageService, didUnadvertiseAs name: String) {}
 }
 
 // ----------------------------------------------------------------------------
@@ -309,6 +314,9 @@ public class RemoteMessageClient {
         case .cancelled:
             didInvalidate?(self)
             delegate?.clientDidEndSession(self)
+
+        @unknown default:
+            assert(false)
         }
     }
     
@@ -383,8 +391,8 @@ public class RemoteMessageClient {
 @available(iOS 12.0, macOS 10.14, tvOS 12.0, *)
 extension RemoteMessageClient: Hashable {
     
-    public var hashValue: Int {
-        return id.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     public static func ==(lhs: RemoteMessageClient, rhs: RemoteMessageClient) -> Bool {
@@ -514,6 +522,9 @@ public class MessageClient {
         /// Cancelled connections have been invalidated by the client and will send no more events
         case .cancelled:
             delegate?.clientDidEndSession(self)
+            
+        @unknown default:
+            assert(false)
         }
     }
     
@@ -648,7 +659,7 @@ private class MessageSender {
         bytes.withUnsafeMutableBufferPointer {
             UnsafeMutableRawPointer($0.baseAddress!).storeBytes(of: value, as: T.self)
         }
-        let data = Data(bytes: bytes)
+        let data = Data(bytes)
         return data
     }
 }
@@ -743,7 +754,7 @@ private extension Data {
     }
     
     func scanValue<T>(start: Int, length: Int) -> T {
-        return subdata(in: start..<start+length).withUnsafeBytes { $0.pointee }
+        return subdata(in: start..<start+length).withUnsafeBytes { $0.load(as: T.self) }
     }
 }
 
