@@ -12,8 +12,7 @@ Approach is available under the MIT License. See the LICENSE file in the reposit
 
 ## Building with Swift Package Manager
 
-Build with Mojave as build target:
-
 ```bash
-swift build"
+swift package update
+swift build
 ```
