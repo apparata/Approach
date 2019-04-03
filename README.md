@@ -15,5 +15,5 @@ Approach is available under the MIT License. See the LICENSE file in the reposit
 Build with Mojave as build target:
 
 ```bash
-swift build -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.12"
+swift build"
 ```
