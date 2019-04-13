@@ -244,7 +244,7 @@ public class RemoteMessageClient {
     
     fileprivate var didInvalidate: ((RemoteMessageClient) -> Void)?
     
-    weak var delegate: RemoteMessageClientDelegate?
+    public weak var delegate: RemoteMessageClientDelegate?
     
     private let connection: NWConnection
     
@@ -401,7 +401,7 @@ extension RemoteMessageClient: Hashable {
 }
 
 @available(iOS 12.0, macOS 10.14, tvOS 12.0, *)
-public protocol RemoteMessageClientDelegate: class {
+public protocol RemoteMessageClientDelegate: AnyObject {
     func clientDidStartSession(_ client: RemoteMessageClient)
     func client(_ client: RemoteMessageClient, didPauseSessionWithError error: NWError)
     func client(_ client: RemoteMessageClient, didFailSessionWithError error: Error)
@@ -410,7 +410,7 @@ public protocol RemoteMessageClientDelegate: class {
 }
 
 @available(iOS 12.0, macOS 10.14, tvOS 12.0, *)
-extension RemoteMessageClientDelegate {
+public extension RemoteMessageClientDelegate {
     func clientDidStartSession(_ client: RemoteMessageClient) {}
     func client(_ client: RemoteMessageClient, didPauseSessionWithError error: NWError) {}
     func client(_ client: RemoteMessageClient, didFailSessionWithError error: Error) {}
