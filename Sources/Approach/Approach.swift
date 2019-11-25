@@ -74,6 +74,13 @@ public class MessageService {
     public static var log: ((MessageService, String) -> Void)?
     
     public weak var delegate: MessageServiceDelegate?
+
+    public var port: Int? {
+        if let value = listener?.port?.rawValue {
+            return Int(value)
+        }
+        return nil
+    }
     
     private let queue = DispatchQueue(label: "MessageServiceQueue", qos: .userInteractive)
     
