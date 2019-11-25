@@ -38,7 +38,7 @@ import Network
 // ---------------------------------------------------------------------------
 
 private let messageServiceProtocolVersion = "0001"
-private let messageServiceType = "_apparata-approach-v\(messageServiceProtocolVersion)._tcp"
+public let messageServiceType = "_apparata-approach-v\(messageServiceProtocolVersion)._tcp"
 private let messageServiceVersion = "APPSERVICEV\(messageServiceProtocolVersion)"
 private let messageClientVersion = "APPCLIENTV\(messageServiceProtocolVersion)"
 private let maxMessageDataLength: Int32 = 10_000_000
@@ -82,11 +82,14 @@ public class MessageService {
     private var clients: [UUID: RemoteMessageClient] = [:]
     
     private var serviceName: String?
+
+    private var serviceType: String
     
     private var restartOnDidBecomeActive = false
     
-    public init(name: String? = nil) throws {
+    public init(name: String? = nil, serviceType: String = messageServiceType) throws {
         serviceName = name
+        self.serviceType = serviceType
         observeAppState()
         try createService()
     }
@@ -101,7 +104,7 @@ public class MessageService {
         #endif
     }
     
-    public func createService() throws {
+    private func createService() throws {
         
         if listener != nil {
             listener?.cancel()
@@ -109,7 +112,7 @@ public class MessageService {
         }
         
         let newListener = try NWListener(using: .tcp)
-        newListener.service = NWListener.Service(name: serviceName, type: messageServiceType)
+        newListener.service = NWListener.Service(name: serviceName, type: serviceType)
         
         newListener.serviceRegistrationUpdateHandler = { [weak self] serviceChange in
             switch serviceChange {
@@ -433,14 +436,16 @@ public class MessageClient {
     private var connection: NWConnection?
     
     private let serviceName: String
+    private let serviceType: String
     
     private let messageSender = MessageSender()
     private let messageReceiver = MessageReceiver()
     
     private var didHandshake: Bool = false
     
-    public init(serviceName: String) {
+    public init(serviceName: String, serviceType: String = messageServiceType) {
         self.serviceName = serviceName
+        self.serviceType = serviceType
     }
     
     public func connect() {
@@ -454,7 +459,7 @@ public class MessageClient {
         didHandshake = false
         
         let service: NWEndpoint = .service(name: serviceName,
-                                           type: messageServiceType,
+                                           type: serviceType,
                                            domain: "local",
                                            interface: nil)
         
