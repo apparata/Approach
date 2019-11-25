@@ -93,10 +93,13 @@ public class MessageService {
     private var serviceType: String
     
     private var restartOnDidBecomeActive = false
+
+    private var requestedPort: Int?
     
-    public init(name: String? = nil, serviceType: String = messageServiceType) throws {
+    public init(name: String? = nil, serviceType: String = messageServiceType, port: Int? = nil) throws {
         serviceName = name
         self.serviceType = serviceType
+        requestedPort = port
         observeAppState()
         try createService()
     }
@@ -118,7 +121,12 @@ public class MessageService {
             listener = nil
         }
         
-        let newListener = try NWListener(using: .tcp)
+        let newListener: NWListener
+        if let port = requestedPort, let endpointPort = NWEndpoint.Port(rawValue: UInt16(port)) {
+            newListener = try NWListener(using: .tcp, on: endpointPort)
+        } else {
+            newListener = try NWListener(using: .tcp)
+        }
         newListener.service = NWListener.Service(name: serviceName, type: serviceType)
         
         newListener.serviceRegistrationUpdateHandler = { [weak self] serviceChange in
