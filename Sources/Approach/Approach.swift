@@ -452,6 +452,8 @@ public class MessageClient {
     
     private let serviceName: String
     private let serviceType: String
+
+    private let serviceEndpoint: NWEndpoint
     
     private let messageSender = MessageSender()
     private let messageReceiver = MessageReceiver()
@@ -461,6 +463,19 @@ public class MessageClient {
     public init(serviceName: String, serviceType: String = messageServiceType) {
         self.serviceName = serviceName
         self.serviceType = serviceType
+
+        serviceEndpoint = .service(name: serviceName,
+                                   type: serviceType,
+                                   domain: "local",
+                                   interface: nil)
+    }
+
+    public init(host: String, port: UInt16) {
+        serviceName = host
+        serviceType = "\(port)"
+
+        serviceEndpoint = .hostPort(host: NWEndpoint.Host(host),
+                                    port: NWEndpoint.Port(rawValue: port) ?? NWEndpoint.Port(4040))
     }
     
     public func connect() {
@@ -472,13 +487,8 @@ public class MessageClient {
         
         self.connection = nil
         didHandshake = false
-        
-        let service: NWEndpoint = .service(name: serviceName,
-                                           type: serviceType,
-                                           domain: "local",
-                                           interface: nil)
-        
-        let connection = NWConnection(to: service, using: .tcp)
+
+        let connection = NWConnection(to: serviceEndpoint, using: .tcp)
         self.connection = connection
         
         connection.restart()
