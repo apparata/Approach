@@ -103,6 +103,10 @@ public class MessageService {
         observeAppState()
         try createService()
     }
+
+    deinit {
+        stop()
+    }
     
     public func observeAppState() {
         #if os(iOS) || os(tvOS)
@@ -162,6 +166,13 @@ public class MessageService {
     private func recreateService() throws {
         try createService()
         start()
+    }
+
+    public func stop() {
+        if listener != nil {
+            listener?.cancel()
+            listener = nil
+        }
     }
     
     private func handleIncomingConnection(_ connection: NWConnection) {
