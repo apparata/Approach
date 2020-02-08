@@ -169,6 +169,9 @@ public class MessageService {
     }
 
     public func stop() {
+        for (_, remoteClient) in clients {
+            remoteClient.cancelConnection()
+        }
         if listener != nil {
             listener?.cancel()
             listener = nil
@@ -299,6 +302,10 @@ public class RemoteMessageClient {
     
     fileprivate func start(queue: DispatchQueue) {
         connection.start(queue: queue)
+    }
+    
+    fileprivate func cancelConnection() {
+        connection.cancel()
     }
     
     private func configureConnection(_ connection: NWConnection) {
