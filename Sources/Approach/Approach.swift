@@ -496,6 +496,10 @@ public class MessageClient {
                                     port: NWEndpoint.Port(rawValue: port) ?? NWEndpoint.Port(4040))
     }
     
+    deinit {
+        connection?.cancel()
+    }
+    
     public func connect() {
         
         guard self.connection == nil || self.connection?.state == .cancelled else {
