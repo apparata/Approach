@@ -250,7 +250,7 @@ public class MessageService {
 }
 
 @available(iOS 12.0, macOS 10.14, tvOS 12.0, *)
-public protocol MessageServiceDelegate: class {
+public protocol MessageServiceDelegate: AnyObject {
     func messageService(_ service: MessageService, didAdvertiseAs name: String)
     func messageService(_ service: MessageService, didUnadvertiseAs name: String)
     
@@ -644,7 +644,7 @@ public class MessageClient {
 }
 
 @available(iOS 12.0, macOS 10.14, tvOS 12.0, *)
-public protocol MessageClientDelegate: class {
+public protocol MessageClientDelegate: AnyObject {
     func clientDidStartSession(_ client: MessageClient)
     func client(_ client: MessageClient, didPauseSessionWithError error: NWError)
     func client(_ client: MessageClient, didFailSessionWithError error: Error)
