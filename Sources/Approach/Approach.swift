@@ -283,7 +283,7 @@ public class RemoteMessageClient {
     private let messageSender = MessageSender()
     private let messageReceiver = MessageReceiver()
     
-    private var didHandshake: Bool = false
+    public private(set) var didHandshake: Bool = false
     
     fileprivate init(connection: NWConnection) {
         id = UUID()
