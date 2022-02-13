@@ -82,12 +82,16 @@ public class MessageService {
         return nil
     }
     
+    public var allClients: Set<RemoteMessageClient> {
+        Set(clients.values)
+    }
+    
     private let queue = DispatchQueue(label: "MessageServiceQueue", qos: .userInteractive)
     
     private var listener: NWListener?
     
     private var clients: [UUID: RemoteMessageClient] = [:]
-    
+        
     private var serviceName: String?
 
     private var serviceType: String
