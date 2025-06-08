@@ -136,7 +136,7 @@ class ExampleServer: MessageServiceDelegate, RemoteMessageClientDelegate {
 
         print("Server received a message of type: \(metadata.rawValue)")
 
-        let message = GeneralMessage.decode(from: data),
+        let message = GeneralMessage.decode(from: data)
 
         switch message {
         case .helloWorld:
