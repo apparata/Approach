@@ -109,6 +109,7 @@ class ExampleServer: MessageServiceDelegate, RemoteMessageClientDelegate {
     @discardableResult
     func start() -> Self {
         service.start()
+        return self
     }
 
     func messageService(
@@ -190,6 +191,7 @@ class ExampleClient: MessageClientDelegate {
     @discardableResult
     func connect() -> Self {
         client.connect()
+        return self
     }
 
     func clientDidStartSession(_ client: MessageClient) {
