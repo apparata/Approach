@@ -1,11 +1,11 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.9
 
 import PackageDescription
 
 let package = Package(
     name: "Approach",
     platforms: [
-        .macOS(.v10_14), .iOS(.v12), .tvOS(.v12)
+        .macOS(.v13), .iOS(.v16), .tvOS(.v16), .visionOS(.v1)
     ],
     products: [
         .library(name: "Approach", targets: ["Approach"]),
